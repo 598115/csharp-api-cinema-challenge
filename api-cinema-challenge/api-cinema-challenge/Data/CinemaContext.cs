@@ -89,8 +89,8 @@ namespace api_cinema_challenge.Data
                     NumSeats = 1,
                     ScreeningId = 2,
                     CustomerId = 1,
-                    CreatedAt = DateTime.Now.ToUniversalTime(),
-                    UpdatedAt = DateTime.Now.ToUniversalTime()
+                    CreatedAt = DateTime.MinValue,
+                    UpdatedAt = DateTime.MinValue
                 },
                 new Ticket()
                 {
@@ -98,8 +98,8 @@ namespace api_cinema_challenge.Data
                     NumSeats = 3,
                     ScreeningId = 1,
                     CustomerId = 2,
-                    CreatedAt = DateTime.Now.ToUniversalTime(),
-                    UpdatedAt= DateTime.Now.ToUniversalTime()
+                    CreatedAt = DateTime.MinValue,
+                    UpdatedAt= DateTime.MinValue
                 }
             );
         }
@@ -107,5 +107,6 @@ namespace api_cinema_challenge.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Screening> Screenings { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
     }
 }

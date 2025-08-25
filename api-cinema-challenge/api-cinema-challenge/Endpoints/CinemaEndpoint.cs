@@ -1,6 +1,7 @@
 ﻿using api_cinema_challenge.DTOs;
 using api_cinema_challenge.Models;
 using api_cinema_challenge.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Numerics;
 using System.Xml.Linq;
@@ -28,6 +29,7 @@ namespace api_cinema_challenge.Endpoints
             cinemaGroup.MapGet("/tickets", GetTickets);
         }
 
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetMovies(IRepository<Movie> repository)
         {
@@ -42,7 +44,7 @@ namespace api_cinema_challenge.Endpoints
 
             return TypedResults.Ok(movies);
         }
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetTickets(IRepository<Ticket> repository, IRepository<Screening> screenRepo, IRepository<Customer> customerRepo)
         {
@@ -89,7 +91,7 @@ namespace api_cinema_challenge.Endpoints
 
             return TypedResults.Ok(tickets);
         }
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetCustomers(IRepository<Customer> repository)
         {
@@ -108,7 +110,7 @@ namespace api_cinema_challenge.Endpoints
 
             return TypedResults.Ok(customerDTOs);
         }
-
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public static async Task<IResult> CreateCustomer(IRepository<Customer> repository, CustomerDTO cust)
         {
@@ -130,7 +132,7 @@ namespace api_cinema_challenge.Endpoints
                 UpdatedAt = newticket.UpdatedAt
             });
         }
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public static async Task<IResult> CreateScreening(IRepository<Screening> repository, ScreeningPost screen)
         {
@@ -138,7 +140,7 @@ namespace api_cinema_challenge.Endpoints
             newscreen = await repository.Create(newscreen);
             return TypedResults.Created("Created new screening", new ScreeningDTO { MovieId = newscreen.MovieId, ScreenNumber = newscreen.ScreenNumber, Capacity = newscreen.Capacity, CreatedAt = newscreen.CreatedAt, UpdatedAt = newscreen.UpdatedAt, StartsAt = newscreen.StartsAt });
         }
-
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetScreenings(IRepository<Screening> repository)
         {
@@ -169,7 +171,7 @@ namespace api_cinema_challenge.Endpoints
 
             return TypedResults.Ok(screeningDTOs);
         }
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public static async Task<IResult> CreateMovie(IRepository<Movie> repository, MovieDTO mov)
         {
@@ -193,7 +195,7 @@ namespace api_cinema_challenge.Endpoints
                 UpdatedAt = mov.UpdatedAt
             });
         }
-
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetMovieById(IRepository<Movie> repository, int id)
         {
@@ -209,7 +211,7 @@ namespace api_cinema_challenge.Endpoints
             };
             return TypedResults.Ok(movdto);
         }
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> DeleteMovie(IRepository<Movie> repository, int id)
         {
@@ -225,7 +227,7 @@ namespace api_cinema_challenge.Endpoints
             };
             return TypedResults.Ok(movdto);
         }
-
+        [Authorize(Roles = "Admin")]
         public static async Task<IResult> DeleteCustomer(IRepository<Customer> repository, int id)
         {
             Customer cust = await repository.Delete(id);
@@ -238,7 +240,7 @@ namespace api_cinema_challenge.Endpoints
             return TypedResults.Ok(custdto);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> Delete(IRepository<Movie> repository, int id)
         {
@@ -254,7 +256,7 @@ namespace api_cinema_challenge.Endpoints
             };
             return TypedResults.Ok(movdto);
         }
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> UpdateCustomer(IRepository<Customer> repository, CustomerDTO custdto, int id)
         {
@@ -263,7 +265,7 @@ namespace api_cinema_challenge.Endpoints
             CustomerDTO returnedCust = new CustomerDTO { Name = updatedCust.Name, Email = updatedCust.Email, Phone = updatedCust.Phone };
             return TypedResults.Ok(returnedCust);
         }
-
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> UpdateMovie(IRepository<Movie> repository, MovieDTO movdto, int id)
         {
